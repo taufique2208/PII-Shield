@@ -17,9 +17,9 @@ const User = () => {
 
 
         const contract = new ethers.Contract(
-            '0x62C158c7F4326067DaF185F39EC66481477a1598',
-            Aadhaar.abi,
-            signer
+          process.env.REACT_APP_CONTRACT_ADDRESS,
+          Aadhaar.abi,
+          signer
         );
         setContract(contract);
         
