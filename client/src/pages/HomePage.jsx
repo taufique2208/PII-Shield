@@ -22,19 +22,38 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
-      <div className="text-center">
-        {localStorage.getItem("account") ? (
-          <Outlet />
-        ) : (
+    <>
+    {localStorage.getItem("account") ? (
+      // Render the content from Outlet normally without centering
+      <div className="min-h-screen">
+        <Outlet />
+      </div>
+    ) : (
+      // When not connected, center the "Connect Your Wallet" button
+      <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
+        <div className="text-center">
           <button
             onClick={connectWallet}
             className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg">
             Connect Your Wallet
           </button>
-        )}
+        </div>
       </div>
-    </div>
+    )}
+  </>
+    // <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
+    //   <div className="text-center">
+    //     {localStorage.getItem("account") ? (
+    //       <Outlet />
+    //     ) : (
+    //       <button
+    //         onClick={connectWallet}
+    //         className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg">
+    //         Connect Your Wallet
+    //       </button>
+    //     )}
+    //   </div>
+    // </div>
   );
 };
 
