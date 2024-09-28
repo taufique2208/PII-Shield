@@ -104,11 +104,11 @@ const User = () => {
     };
 
     const handleApprove = async (id,companyAddress) => {
-        if(id === 'name'){
+        if(id === 'Name'){
             await contract.grantAccessName(companyAddress);
             console.log("Access granted for name");
         }
-        if (id === "HomeAddress") {
+        if (id === "Home Address") {
           await contract.grantAccessHomeAddress(companyAddress);
           console.log("Access granted for name");
         }

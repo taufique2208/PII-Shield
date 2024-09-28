@@ -22,7 +22,7 @@ contract Aadhaar {
     function requestAccessName(address userAddress) public {
         // function used by company to request access
 
-        emit userNotification("name", msg.sender, userAddress);
+        emit userNotification("Name", msg.sender, userAddress);
     }
 
     function grantAccessName(address userAddress) public {
@@ -40,7 +40,7 @@ contract Aadhaar {
 
     function requestAccessHomeAddress(address userAddress) public {
         // function used by company to request access
-        emit userNotification("HomeAddress", msg.sender, userAddress);
+        emit userNotification("Home Address", msg.sender, userAddress);
     }
 
     function grantAccessHomeAddress(address userAddress) public {
@@ -188,7 +188,7 @@ contract Aadhaar {
         view
         canAccessName(userAddress)
         doesExist(userAddress)
-        returns (string memory)
+        returns (string memory name)
     {
         return aadhaarMapping[userAddress].name;
     }
@@ -201,7 +201,7 @@ contract Aadhaar {
         view
         canAccessDOB(userAddress)
         doesExist(userAddress)
-        returns (string memory)
+        returns (string memory DOB)
     {
         return aadhaarMapping[userAddress].DOB;
     }
@@ -214,7 +214,7 @@ contract Aadhaar {
         view
         canAccessHomeAddress(userAddress)
         doesExist(userAddress)
-        returns (string memory)
+        returns (string memory HomeAddress)
     {
         return aadhaarMapping[userAddress].HomeAddress;
     }
@@ -227,7 +227,7 @@ contract Aadhaar {
         view
         canAccessGender(userAddress)
         doesExist(userAddress)
-        returns (string memory)
+        returns (string memory gender)
     {
         return aadhaarMapping[userAddress].gender;
     }
