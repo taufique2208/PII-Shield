@@ -16,7 +16,7 @@ const Company = () => {
       const signer = provider.getSigner();
 
       const contract = new ethers.Contract(
-        '0x62C158c7F4326067DaF185F39EC66481477a1598',
+        '0xC3E7646696a672dD96133499A9c557c991b1a3bb',
         Aadhaar.abi,
         signer
       );
