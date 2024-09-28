@@ -108,6 +108,18 @@ const User = () => {
             await contract.grantAccessName(companyAddress);
             console.log("Access granted for name");
         }
+        if (id === "HomeAddress") {
+          await contract.grantAccessHomeAddress(companyAddress);
+          console.log("Access granted for name");
+        }
+        if (id === "DOB") {
+          await contract.grantAccessDOB(companyAddress);
+          console.log("Access granted for name");
+        }
+        if (id === "Gender") {
+          await contract.grantAccessGender(companyAddress);
+          console.log("Access granted for name");
+        }
     }
 
     return (
