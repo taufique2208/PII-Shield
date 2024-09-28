@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from "ethers";
 import Aadhaar from '../contracts/Aadhaar.json'
-import './User.css';
+// import './User.css';
 
 const User = () => {
 
@@ -17,9 +17,9 @@ const User = () => {
 
 
         const contract = new ethers.Contract(
-            '0xC3E7646696a672dD96133499A9c557c991b1a3bb',
-            Aadhaar.abi,
-            signer
+          process.env.REACT_APP_CONTRACT_ADDRESS,
+          Aadhaar.abi,
+          signer
         );
         setContract(contract);
         

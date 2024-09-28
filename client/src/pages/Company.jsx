@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import Aadhaar from '../contracts/Aadhaar.json';
-import './Company.css'; // Import your CSS file for styling
+// import './Company.css'; // Import your CSS file for styling
 
 const Company = () => {
   const { id } = useParams();
@@ -16,7 +16,7 @@ const Company = () => {
       const signer = provider.getSigner();
 
       const contract = new ethers.Contract(
-        '0xC3E7646696a672dD96133499A9c557c991b1a3bb',
+        process.env.REACT_APP_CONTRACT_ADDRESS,
         Aadhaar.abi,
         signer
       );
@@ -87,7 +87,11 @@ const Company = () => {
       {!localStorage.getItem('account') ? (
         <>
           <h1>Connect Wallet</h1>
-          <button onClick={connectWallet}>Connect MetaMask</button>
+          <button
+            onClick={connectWallet}
+            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg">
+            Connect Your Wallet
+          </button>
         </>
       ) : (
         <>
