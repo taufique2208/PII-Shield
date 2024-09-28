@@ -83,7 +83,7 @@ const Company = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
       {!localStorage.getItem('account') ? (
         <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
         <div className="text-center">
@@ -95,8 +95,8 @@ const Company = () => {
         </div>
       </div>
       ) : (
-        <div className="p-10 bg-white shadow-lg rounded-lg w-full max-w-2xl">
-          <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">User Data</h1>
+        <div className="p-10 shadow-lg bg-slate-950 backdrop-blur-3xl rounded-lg w-full max-w-2xl">
+          <h1 className="text-2xl font-bold mb-6 text-white text-center">User Data</h1>
           <div className="space-y-6">
             {/* Name Button */}
             {data.name === '' ? (
