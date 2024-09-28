@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ethers } from "ethers";
 import Aadhaar from '../contracts/Aadhaar.json'
-import './User.css';
+// import './User.css';
 
 const User = () => {
 
@@ -123,92 +123,100 @@ const User = () => {
     }
 
     return (
-        <div>
-
-            {!account ?
-                <button onClick={connectWallet} className="wallet-connect-btn">Chal Wallet Connect Kar</button>
-
-                :
-                <>
-                    <h2>User Form</h2>
-                    <form onSubmit={handleSubmit} className="user-form">
-                        <div className="form-group">
-                            <label for="name">Name:</label>
-                            <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label for="dob">Date of Birth:</label>
-                            <input
-                                type="date"
-                                name="dob"
-                                id="dob"
-                                value={formData.dob}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label for="address">Address:</label>
-                            <input
-                                type="text"
-                                name="address"
-                                id="address"
-                                value={formData.address}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label for="gender">Gender:</label>
-                            <select
-                                name="gender"
-                                id="gender"
-                                value={formData.gender}
-                                onChange={handleChange}
-                                required
-                            >
-                                <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <button type="submit" className="submit-btn">Submit</button>
-                    </form>
-
-
-
-                    <div className="event-list">
-                        <h2>Event List</h2>
+        <div className='p-10'>
+            {!account ? (
+                <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
+                    <div className="text-center">
+                        <h2 className="text-white mb-4 text-2xl">Please connect a wallet that belongs to you, the User/Client.</h2>
+                        <button
+                            onClick={connectWallet}
+                            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg">
+                            Connect Your Wallet
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <div className="flex flex-col items-center">
+                    {/* <div> */}
+                        <h2 className="text-2xl font-bold mb-6">User Form</h2>
                         
-                        <ul>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <label className="input input-bordered flex items-center gap-2">
+                                <span>Name</span>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    id="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="Enter your name"
+                                    className="grow"
+                                    required
+                                />
+                            </label>
+                            <label className="input input-bordered flex items-center gap-2">
+                                <span>Date of Birth</span>
+                                <input
+                                    type="date"
+                                    name="dob"
+                                    id="dob"
+                                    value={formData.dob}
+                                    onChange={handleChange}
+                                    className="grow"
+                                    required
+                                />
+                            </label>
+                            <label className="input input-bordered flex items-center gap-2">
+                                <span>Address</span>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    id="address"
+                                    value={formData.address}
+                                    onChange={handleChange}
+                                    placeholder="Enter your address"
+                                    className="grow"
+                                    required
+                                />
+                            </label>
+                            <label className="input input-bordered flex items-center gap-2">
+                                <span>Gender</span>
+                                <select
+                                    name="gender"
+                                    id="gender"
+                                    value={formData.gender}
+                                    onChange={handleChange}
+                                    className="grow"
+                                    required
+                                >
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </label>
+                            <button type="submit" className="btn btn-primary w-full">Submit</button>
+                        </form>
+                    {/* </div> */}
+    
+                    <div className="mt-10 w-full max-w-md">
+                        <h2 className="text-2xl font-bold mb-6">Event List</h2>
+                        <ul className="space-y-2">
                             {userEvents.map(event => (
-                                
-                                <li key={event.address} className="event-item">
-                                    {/* <h1>hi</h1> */}
+                                <li key={event.address} className="event-item flex justify-between items-center p-2 border border-gray-300 rounded-md">
                                     <span>{event.args[0]}</span>
-                                    <button onClick={() => handleApprove(event.args[0],event.args[1])} className="approve-button">
+                                    <button onClick={() => handleApprove(event.args[0], event.args[1])} className="approve-button btn btn-secondary">
                                         Approve
                                     </button>
                                 </li>
                             ))}
                         </ul>
                     </div>
-
-                </>
-            }
-
-
+                </div>
+            )}
         </div>
-
     );
+    
 }
 
 export default User

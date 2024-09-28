@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import User from "./pages/User";
 import Company from "./pages/Company";
 import HomePage from "./pages/HomePage";
+import './index.css';
 import { Outlet } from "react-router-dom";
 
 function App() {
