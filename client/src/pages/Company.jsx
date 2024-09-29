@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ethers } from "ethers";
 import Aadhaar from "../contracts/Aadhaar.json";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 // import './Company.css'; // Import your CSS file for styling
 
@@ -216,7 +217,7 @@ const Company = () => {
             )}
           </div>
         </div>
-      )}
+      )}``
     </div>
     // <>
     //   {!localStorage.getItem('account') ? (

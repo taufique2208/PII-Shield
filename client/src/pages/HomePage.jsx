@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Outlet } from "react-router-dom";
-import "./HomePage.css";
+// import "./HomePage.css";
 import CompanyEnrollment from "../contracts/CompanyEnrollment.json";
 
 
