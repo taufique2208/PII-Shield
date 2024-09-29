@@ -10,9 +10,9 @@ import Navbar from "../components/Navbar";
 const User = () => {
   const [contract, setContract] = useState(null);
   const [userEvents, setUserEvents] = useState([]);
-  const {isConnected, address} = useAccount()
+  const { isConnected, address } = useAccount()
   const [loading, setLoading] = useState(false);
-
+  const [link, setLink] = useState("http://localhost:3000/company/adadsadwdasfawghasfhasfhah");
   // const [pending,set]
   useEffect(() => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -31,16 +31,16 @@ const User = () => {
       try {
         const events = await contract.getAllEvents();
 
-        for(let i=0; i<events.length; i++){
-          if(events[i][3].toString().trim().toLowerCase() === "pending"){
+        for (let i = 0; i < events.length; i++) {
+          if (events[i][3].toString().trim().toLowerCase() === "pending") {
             setUserEvents((prevEvents) => [...prevEvents, events[i]]);
           }
         }
         console.log(events);
       } catch (error) {
         console.log("Error fetching events:", error);
-      }finally{
-        setLoading(false) 
+      } finally {
+        setLoading(false)
       }
     };
     getEvents();
@@ -69,16 +69,18 @@ const User = () => {
         formData.gender
       );
       console.log("User data submitted successfully");
+      const link = `http://localhost:3000/company/${address}`;
+      setLink(link);
     } catch (error) {
       console.log("Error submitting user data:", error);
-    }finally{
+    } finally {
       setLoading(false)
     }
   };
 
   const handleApprove = async (id, companyAddress) => {
     setLoading(true)
-    try{
+    try {
       if (id === "name") {
         await contract.grantAccessName(companyAddress);
         console.log("Access granted for name");
@@ -95,13 +97,24 @@ const User = () => {
         await contract.grantAccessGender(companyAddress);
         console.log("Access granted for Gender");
       }
-    }catch(error){
+    } catch (error) {
       console.log("Error approving data:", error);
-    }finally{
-      setLoading(false) 
+    } finally {
+      setLoading(false)
     }
 
   };
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(link)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000); // Reset copied state after 2 seconds
+      })
+      .catch((err) => console.error("Failed to copy text: ", err));
+  };
+
 
   if (loading) {
     return (
@@ -110,31 +123,48 @@ const User = () => {
       </div>
     );
   }
+  // const [active, setActive] = useState(false);
+  // const textRef = useRef(null);
+
+  // const copyToClipboard = () => {
+  //   if (textRef.current) {
+  //     const range = document.createRange();
+  //     range.selectNode(textRef.current);
+  //     window.getSelection().removeAllRanges();
+  //     window.getSelection().addRange(range);
+  //     document.execCommand("copy");
+  //     window.getSelection().removeAllRanges();
+  //     setActive(true);
+  //     setTimeout(() => {
+  //       setActive(false);
+  //     }, 2500);
+  //   }
+  // };
 
   return (
     <div className="">
-      <Navbar/>
+      <Navbar />
       {!isConnected ? (
         <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
-        <div className="card lg:card-side bg-base-100 shadow-2xl m-10 max-w-6xl h-[400px]">
-          <figure>
-            <img
-              src="https://www.goanywhere.com/sites/default/files/2024-08/ga-guard-pii-with-threat-protection-1200x628.png"
-              className="h-full w-96 object-cover"
-              alt="Album"
-            />
-          </figure>
-          <div className="card-body pl-10">
-            <h2 className="card-title text-4xl font-bold">Connect Your Wallet</h2>
-            <p className="text-lg text-gray-600">
-              Easily connect using various wallet providers and start interacting with our platform.
-            </p>
-            <div className="card-actions justify-end mt-6">
-              <ConnectButton />
+          <div className="card lg:card-side bg-base-100 shadow-2xl m-10 max-w-6xl h-[400px]">
+            <figure>
+              <img
+                src="https://www.goanywhere.com/sites/default/files/2024-08/ga-guard-pii-with-threat-protection-1200x628.png"
+                className="h-full w-96 object-cover"
+                alt="Album"
+              />
+            </figure>
+            <div className="card-body pl-10">
+              <h2 className="card-title text-4xl font-bold">Connect Your Wallet</h2>
+              <p className="text-lg text-gray-600">
+                Easily connect using various wallet providers and start interacting with our platform.
+              </p>
+              <div className="card-actions justify-end mt-6">
+                <ConnectButton />
+              </div>
             </div>
           </div>
         </div>
-      </div>
       ) : (
         <div className="flex flex-col items-center">
           {/* <div> */}
@@ -199,19 +229,28 @@ const User = () => {
               Submit
             </button>
           </form>
-          <button
-            onClick={() => {
-              console.log(address);
-            }}
-          >
-          
-          </button>
-          {/* </div> */}
 
-          <div className="mt-10 w-full max-w-md">
+          {link && (
+            <div className="mt-10">
+            <h3 className="block text-white text-sm font-medium mb-3">Get your link</h3>
+            <div className="flex items-center bg-gray-800 p-2 rounded-lg shadow-md">
+              
+              <span className="text-white text-sm mr-3">{link}</span>
+              <button
+                onClick={handleCopy}
+                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition text-sm"
+              >
+                {isCopied ? "Copied!" : "Copy"}
+              </button>
+            </div>
+            </div>
+          )}
+
+
+          <div className="mt-20 w-full max-w-md">
             <h2 className="text-2xl font-bold mb-6">Event List</h2>
             <ul className="space-y-2">
-              {userEvents.map((event,id) => (
+              {userEvents.map((event, id) => (
                 <li
                   key={id}
                   className="event-item flex justify-between items-center p-2 border border-gray-300 rounded-md"
