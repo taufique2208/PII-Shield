@@ -2,7 +2,7 @@
 pragma solidity ^0.8.18;
 
 contract Aadhaar {
-    event userNotification(string field, address company, address indexed user);
+    event userNotification(string field, address company, address indexed user,string name);
 
     // struct to store user aadhar
     struct User_Aadhaar {
@@ -19,37 +19,37 @@ contract Aadhaar {
     mapping(address => address[]) public accessMappingHomeAddress;
     mapping(address => address[]) public accessMappingGender;
 
-    function requestAccessName(address userAddress) public {
+    function requestAccessName(address userAddress,string memory name) public {
         // function used by company to request access
 
-        emit userNotification("Name", msg.sender, userAddress);
+        emit userNotification("Name", msg.sender, userAddress,name);
     }
 
     function grantAccessName(address userAddress) public {
         accessMappingName[msg.sender].push(userAddress);    
     }
 
-    function requestAccessDOB(address userAddress) public {
+    function requestAccessDOB(address userAddress,string memory name) public {
         // function used by company to request access
-        emit userNotification("DOB", msg.sender, userAddress);
+        emit userNotification("DOB", msg.sender, userAddress,name);
     }
 
     function grantAccessDOB(address userAddress) public {
         accessMappingDOB[msg.sender].push(userAddress);
     }
 
-    function requestAccessHomeAddress(address userAddress) public {
+    function requestAccessHomeAddress(address userAddress,string memory name) public {
         // function used by company to request access
-        emit userNotification("Home Address", msg.sender, userAddress);
+        emit userNotification("Home Address", msg.sender, userAddress,name);
     }
 
     function grantAccessHomeAddress(address userAddress) public {
         accessMappingHomeAddress[msg.sender].push(userAddress);
     }
 
-    function requestAccessGender(address userAddress) public {
+    function requestAccessGender(address userAddress,string memory name) public {
         // function used by company to request access
-        emit userNotification("Gender", msg.sender, userAddress);
+        emit userNotification("Gender", msg.sender, userAddress,name);
     }
 
     function grantAccessGender(address userAddress) public {
