@@ -9,7 +9,6 @@ import Navbar from "../components/Navbar";
 
 const User = () => {
   const [contract, setContract] = useState(null);
-  const [account, setAccount] = useState(null);
   const [userEvents, setUserEvents] = useState([]);
   const {isConnected, address} = useAccount()
   const [loading, setLoading] = useState(false);
@@ -24,32 +23,27 @@ const User = () => {
       Aadhaar.abi,
       signer
     );
+
     setContract(contract);
 
     const getEvents = async () => {
+      setLoading(true)
       try {
-        const events = await contract.queryFilter(
-          contract.filters.userNotification(),
-          0,
-          "latest"
-        );
-        events.forEach((event) => {
-          console.log("Event:", event);
-          console.log(address)
-          if (
-            event.args[2].toString().trim().toLowerCase() ===
-            address.toString().trim().toLowerCase()
-          ) {
-            setUserEvents([...userEvents, event]);
+        const events = await contract.getAllEvents();
+
+        for(let i=0; i<events.length; i++){
+          if(events[i][3].toString().trim().toLowerCase() === "pending"){
+            setUserEvents((prevEvents) => [...prevEvents, events[i]]);
           }
-        });
+        }
+        console.log(events);
       } catch (error) {
         console.log("Error fetching events:", error);
+      }finally{
+        setLoading(false) 
       }
     };
     getEvents();
-
-    
   }, []);
 
   const [formData, setFormData] = useState({
@@ -83,22 +77,30 @@ const User = () => {
   };
 
   const handleApprove = async (id, companyAddress) => {
-    if (id === "Name") {
-      await contract.grantAccessName(companyAddress);
-      console.log("Access granted for name");
+    setLoading(true)
+    try{
+      if (id === "name") {
+        await contract.grantAccessName(companyAddress);
+        console.log("Access granted for name");
+      }
+      if (id === "HomeAddress") {
+        await contract.grantAccessHomeAddress(companyAddress);
+        console.log("Access granted for home address");
+      }
+      if (id === "DOB") {
+        await contract.grantAccessDOB(companyAddress);
+        console.log("Access granted for DOB");
+      }
+      if (id === "Gender") {
+        await contract.grantAccessGender(companyAddress);
+        console.log("Access granted for Gender");
+      }
+    }catch(error){
+      console.log("Error approving data:", error);
+    }finally{
+      setLoading(false) 
     }
-    if (id === "Home Address") {
-      await contract.grantAccessHomeAddress(companyAddress);
-      console.log("Access granted for home address");
-    }
-    if (id === "DOB") {
-      await contract.grantAccessDOB(companyAddress);
-      console.log("Access granted for DOB");
-    }
-    if (id === "Gender") {
-      await contract.grantAccessGender(companyAddress);
-      console.log("Access granted for Gender");
-    }
+
   };
 
   if (loading) {
@@ -209,17 +211,17 @@ const User = () => {
           <div className="mt-10 w-full max-w-md">
             <h2 className="text-2xl font-bold mb-6">Event List</h2>
             <ul className="space-y-2">
-              {userEvents.map((event) => (
+              {userEvents.map((event,id) => (
                 <li
-                  key={event.address}
+                  key={id}
                   className="event-item flex justify-between items-center p-2 border border-gray-300 rounded-md"
                 >
-                  <span>{event.args[0]}</span>
-                  <span>company: {event.args[3]}</span>
+                  <span>{event[2]}</span>
+                  <span>company: {event[0]}</span>
                   {/* <span>{event.name}</span> */}
 
                   <button
-                    onClick={() => handleApprove(event.args[0], event.args[1])}
+                    onClick={() => handleApprove(event[2], event[1].toString().trim())}
                     className="approve-button btn btn-secondary"
                   >
                     Approve

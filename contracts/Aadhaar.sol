@@ -12,6 +12,15 @@ contract Aadhaar {
         string gender;
     }
 
+    struct events{
+        string companyName;
+        address companyAdress;
+        string field;
+        string status;
+    }
+
+    mapping(address => events[]) public eventsMapping;
+
     mapping(address => User_Aadhaar) public aadhaarMapping; // mapping which maps user_address to his struct Aadhar
 
     mapping(address => address[]) public accessMappingName; // mapping whihc maps user_address to the list of address which can access the user data. Used for the access modifiier
@@ -21,38 +30,89 @@ contract Aadhaar {
 
     function requestAccessName(address userAddress,string memory name) public {
         // function used by company to request access
-
+        events memory ev = events(name,msg.sender,"name","pending");
+        eventsMapping[userAddress].push(ev);
         emit userNotification("Name", msg.sender, userAddress,name);
     }
 
     function grantAccessName(address userAddress) public {
+        for(uint i = 0; i < eventsMapping[msg.sender].length; i++){
+            if (eventsMapping[msg.sender][i].companyAdress == userAddress && 
+                keccak256(abi.encodePacked(eventsMapping[msg.sender][i].field)) == 
+                keccak256(abi.encodePacked("name")) && keccak256(abi.encodePacked(eventsMapping[msg.sender][i].status)) == keccak256(abi.encodePacked("pending"))) {
+                eventsMapping[msg.sender][i].status = "granted";
+                break;
+            }
+        }
         accessMappingName[msg.sender].push(userAddress);    
     }
 
+    function getAllEvents() public view returns (events[] memory) {
+        return eventsMapping[msg.sender]; 
+    }
+
+
     function requestAccessDOB(address userAddress,string memory name) public {
         // function used by company to request access
+
+        events memory ev = events(name,msg.sender,"DOB","pending");
+        eventsMapping[userAddress].push(ev);
         emit userNotification("DOB", msg.sender, userAddress,name);
     }
 
     function grantAccessDOB(address userAddress) public {
+
+    
+        for (uint i = 0; i < eventsMapping[msg.sender].length; i++) {
+        
+            if (eventsMapping[msg.sender][i].companyAdress == userAddress && 
+                keccak256(abi.encodePacked(eventsMapping[msg.sender][i].field)) == 
+                keccak256(abi.encodePacked("DOB")) && keccak256(abi.encodePacked(eventsMapping[msg.sender][i].status)) == keccak256(abi.encodePacked("pending"))) {
+                eventsMapping[msg.sender][i].status = "granted";
+                break;
+            }
+    }
+
         accessMappingDOB[msg.sender].push(userAddress);
     }
 
     function requestAccessHomeAddress(address userAddress,string memory name) public {
         // function used by company to request access
+        events memory ev = events(name,msg.sender,"HomeAddress","pending");
+        eventsMapping[userAddress].push(ev);
         emit userNotification("Home Address", msg.sender, userAddress,name);
     }
 
     function grantAccessHomeAddress(address userAddress) public {
+
+        for(uint i = 0; i < eventsMapping[msg.sender].length; i++){
+            if (eventsMapping[msg.sender][i].companyAdress == userAddress && 
+                keccak256(abi.encodePacked(eventsMapping[msg.sender][i].field)) == 
+                keccak256(abi.encodePacked("HomeAddress")) && keccak256(abi.encodePacked(eventsMapping[msg.sender][i].status)) == keccak256(abi.encodePacked("pending"))) {
+                eventsMapping[msg.sender][i].status = "granted";
+                break;
+            }
+        }
         accessMappingHomeAddress[msg.sender].push(userAddress);
     }
 
     function requestAccessGender(address userAddress,string memory name) public {
         // function used by company to request access
+        events memory ev = events(name,msg.sender,"Gender","pending");
+        eventsMapping[userAddress].push(ev);
         emit userNotification("Gender", msg.sender, userAddress,name);
     }
 
     function grantAccessGender(address userAddress) public {
+
+        for(uint i = 0; i < eventsMapping[msg.sender].length; i++){
+            if (eventsMapping[msg.sender][i].companyAdress == userAddress && 
+                keccak256(abi.encodePacked(eventsMapping[msg.sender][i].field)) == 
+                keccak256(abi.encodePacked("Gender")) && keccak256(abi.encodePacked(eventsMapping[msg.sender][i].status)) == keccak256(abi.encodePacked("pending"))) {
+                eventsMapping[msg.sender][i].status = "granted";
+                break;
+            }
+        }
         accessMappingGender[msg.sender].push(userAddress);
     }
 

@@ -30,8 +30,8 @@ const Company = () => {
       const signer = provider.getSigner();
 
       const contract = new ethers.Contract(
-        // process.env.REACT_APP_CONTRACT_ADDRESS,
-        "0xf81e0D57Fe463b23559042eF7D0dc80A70eBf4dE",
+        process.env.REACT_APP_CONTRACT_ADDRESS,
+        // "0xf81e0D57Fe463b23559042eF7D0dc80A70eBf4dE",
         Aadhaar.abi,
         signer
       );
@@ -147,7 +147,7 @@ const Company = () => {
 
   const getDOB = async () => {
     try {
-      await contract.requestAccessDOB(id);
+      await contract.requestAccessDOB(id,"ROW");
     } catch (error) {
       console.log("Error getting DOB:", error);
     }
@@ -155,7 +155,7 @@ const Company = () => {
 
   const getGender = async () => {
     try {
-      await contract.requestAccessGender(id);
+      await contract.requestAccessGender(id,"ROW");
     } catch (error) {
       console.log("Error getting gender:", error);
     }
@@ -163,7 +163,7 @@ const Company = () => {
 
   const getAddress = async () => {
     try {
-      await contract.requestAccessHomeAddress(id);
+      await contract.requestAccessHomeAddress(id,"ROW");
     } catch (error) {
       console.log("Error getting address:", error);
     }
