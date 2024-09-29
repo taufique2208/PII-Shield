@@ -3,11 +3,16 @@ import { ethers } from "ethers";
 import Aadhaar from "../contracts/Aadhaar.json";
 // import './User.css';
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import Navbar from "../components/Navbar";
+
 
 const User = () => {
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState(null);
   const [userEvents, setUserEvents] = useState([]);
+  const {isConnected, address} = useAccount()
+  const [loading, setLoading] = useState(false);
 
   // const [pending,set]
   useEffect(() => {
@@ -28,7 +33,6 @@ const User = () => {
           0,
           "latest"
         );
-        // console.log("account:", localStorage.getItem("account"));
         events.forEach((event) => {
           console.log("Event:", event);
           if (
@@ -45,44 +49,6 @@ const User = () => {
     getEvents();
   }, []);
 
-  // useEffect(() => {
-
-  //     const getEvents = async () => {
-  //         try {
-  //             const events = await contract.queryFilter(contract.filters.userNotification(), 0, 'latest');
-  //             console.log("Events:", events);
-  //             events.forEach(event => {
-  //                 if (event.args[2] == account) {
-  //                     setUserEvents([...userEvents, event]);
-  //                 }
-  //             });
-  //         } catch (error) {
-  //             console.log("Error fetching events:", error);
-  //         }
-
-  //     }
-  //     getEvents();
-  // }, [contract, account]);
-
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        console.log("Connected:", accounts[0]);
-        setAccount(accounts[0]);
-        localStorage.setItem("account", accounts[0]);
-      } catch (error) {
-        console.error("Error connecting to MetaMask:", error);
-      }
-    } else {
-      alert(
-        "MetaMask is not installed. Please install MetaMask and try again."
-      );
-    }
-  };
-
   const [formData, setFormData] = useState({
     name: "",
     dob: "",
@@ -97,6 +63,7 @@ const User = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       await contract.createUserDocuments(
         formData.name,
@@ -107,6 +74,8 @@ const User = () => {
       console.log("User data submitted successfully");
     } catch (error) {
       console.log("Error submitting user data:", error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -129,23 +98,38 @@ const User = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div>
+        <span className="loading loading-dots loading-md"></span>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-10">
-      {!account ? (
-        // <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
-        //   <div className="text-center">
-        //     <h2 className="text-white mb-4 text-2xl">
-        //       Please connect a wallet that belongs to you, the User/Client.
-        //     </h2>
-        //     <button
-        //       onClick={connectWallet}
-        //       className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg"
-        //     >
-        //       Connect Your Wallet
-        //     </button>
-        //   </div>
-        // </div>
-        <ConnectButton></ConnectButton>
+    <div className="">
+      <Navbar/>
+      {!isConnected ? (
+        <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
+        <div className="card lg:card-side bg-base-100 shadow-2xl m-10 max-w-6xl h-[400px]">
+          <figure>
+            <img
+              src="https://www.goanywhere.com/sites/default/files/2024-08/ga-guard-pii-with-threat-protection-1200x628.png"
+              className="h-full w-96 object-cover"
+              alt="Album"
+            />
+          </figure>
+          <div className="card-body pl-10">
+            <h2 className="card-title text-4xl font-bold">Connect Your Wallet</h2>
+            <p className="text-lg text-gray-600">
+              Easily connect using various wallet providers and start interacting with our platform.
+            </p>
+            <div className="card-actions justify-end mt-6">
+              <ConnectButton />
+            </div>
+          </div>
+        </div>
+      </div>
       ) : (
         <div className="flex flex-col items-center">
           {/* <div> */}
@@ -210,6 +194,13 @@ const User = () => {
               Submit
             </button>
           </form>
+          <button
+            onClick={() => {
+              console.log(address);
+            }}
+          >
+          
+          </button>
           {/* </div> */}
 
           <div className="mt-10 w-full max-w-md">

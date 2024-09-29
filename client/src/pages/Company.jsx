@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ethers } from "ethers";
 import Aadhaar from "../contracts/Aadhaar.json";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Navbar from "../components/Navbar";
+import { useAccount } from "wagmi";
 
 // import './Company.css'; // Import your CSS file for styling
 
@@ -11,7 +13,8 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 const Company = () => {
   const { id } = useParams();
   const [contract, setContract] = useState(null);
-  const [account, setAccount] = useState("");
+  const [loading, setLoading] = useState(false)
+  // const [account, setAccount] = useState("");
   const [data, setData] = useState({
     name: "",
     dob: "",
@@ -19,16 +22,20 @@ const Company = () => {
     gender: "",
   });
 
+  const account = useAccount()
+  
   useEffect(() => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
       const contract = new ethers.Contract(
-        process.env.REACT_APP_CONTRACT_ADDRESS,
+        // process.env.REACT_APP_CONTRACT_ADDRESS,
+        "0xADCeaDf9EAa27A5DeA227911d2b189EE9da2a294",
         Aadhaar.abi,
         signer
       );
+      console.log(contract)
       setContract(contract);
     } catch (error) {
       console.log("Error in connecting to contract:", error);
@@ -36,93 +43,101 @@ const Company = () => {
   }, []);
 
   useEffect(() => {
-    // const checkAccess = async () => {
+    const checkAccess = async () => {
+      try {
+        console.log(id)
+        const information = await contract.checkAllAccess(id);
+        console.log(information);
+        setData({
+          name: information.name,
+          dob: information.DOB,
+          HomeAddress: information.HomeAddress,
+          gender: information.gender,
+        });
+      } catch (error) {
+        console.log('Error getting data:', error);
+      }
+    };
+    // const getName = async () => {
     //   try {
-    //     console.log(id)
-    //     const information = await contract.checkAllAccess(id);
-    //     console.log(information);
-    //     setData({
-    //       name: information.name,
-    //       dob: information.DOB,
-    //       HomeAddress: information.HomeAddress,
-    //       gender: information.gender,
-    //     });
+    //     const name = await contract.retrieveName(id);
+    //     setData((prevData) => ({ ...prevData, name }));
+    //     console.log(name);
     //   } catch (error) {
-    //     console.log('Error getting data:', error);
+    //     console.log("Error getting name:", error);
     //   }
     // };
-    const getName = async () => {
-      try {
-        const name = await contract.retrieveName(id);
-        setData((prevData) => ({ ...prevData, name }));
-        console.log(name);
-      } catch (error) {
-        console.log("Error getting name:", error);
-      }
-    };
 
-    const getDOB = async () => {
-      try {
-        const DOB = await contract.retrieveDOB(id);
-        setData((prevData) => ({ ...prevData, DOB }));
-        console.log(DOB);
-      } catch (error) {
-        console.log("Error getting name:", error);
-      }
-    };
+    // const getDOB = async () => {
+    //   try {
+    //     const DOB = await contract.retrieveDOB(id);
+    //     setData((prevData) => ({ ...prevData, DOB }));
+    //     console.log(DOB);
+    //   } catch (error) {
+    //     console.log("Error getting name:", error);
+    //   }
+    // };
 
-    const getAddress = async () => {
-      try {
-        const address = await contract.retrieveHomeAddress(id);
-        setData((prevData) => ({ ...prevData, address }));
-        console.log(address);
-      } catch (error) {
-        console.log("Error getting name:", error);
-      }
-    };
+    // const getAddress = async () => {
+    //   try {
+    //     const address = await contract.retrieveHomeAddress(id);
+    //     setData((prevData) => ({ ...prevData, address }));
+    //     console.log(address);
+    //   } catch (error) {
+    //     console.log("Error getting name:", error);
+    //   }
+    // };
 
-    const getGender = async () => {
-      try {
-        const gender = await contract.retrieveGender(id);
-        setData((prevData) => ({ ...prevData, gender }));
-        console.log(gender);
-      } catch (error) {
-        console.log("Error getting name:", error);
-      }
-    };
+    // const getGender = async () => {
+    //   try {
+    //     const gender = await contract.retrieveGender(id);
+    //     setData((prevData) => ({ ...prevData, gender }));
+    //     console.log(gender);
+    //   } catch (error) {
+    //     console.log("Error getting name:", error);
+    //   }
+    // };
 
     if (contract && id) {
-      getName();
-      getDOB();
-      getAddress();
-      getGender();
+      // getName();
+      // getDOB();
+      // getAddress();
+      // getGender();
+      checkAccess();
     }
   }, [contract, id]);
 
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        console.log("Connected:", accounts[0]);
-        setAccount(accounts[0]);
-        localStorage.setItem("account", accounts[0]);
-      } catch (error) {
-        console.error("Error connecting to MetaMask:", error);
-      }
-    } else {
-      alert(
-        "MetaMask is not installed. Please install MetaMask and try again."
-      );
-    }
-  };
+
+  // const connectWallet = async () => {
+  //   if (window.ethereum) {
+  //     try {
+  //       const accounts = await window.ethereum.request({
+  //         method: "eth_requestAccounts",
+  //       });
+  //       console.log("Connected:", accounts[0]);
+  //       setAccount(accounts[0]);
+  //       localStorage.setItem("account", accounts[0]);
+  //     } catch (error) {
+  //       console.error("Error connecting to MetaMask:", error);
+  //     }
+  //   } else {
+  //     alert(
+  //       "MetaMask is not installed. Please install MetaMask and try again."
+  //     );
+  //   }
+  // };
 
   const getName = async () => {
+    setLoading(true)
     try {
-      await contract.requestAccessName(id);
+      if(contract){
+        await contract.requestAccessName(id);
+        console.log("send request")
+      }
     } catch (error) {
       console.log("Error getting name:", error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -150,19 +165,29 @@ const Company = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div>
+        <span className="loading loading-dots loading-md"></span>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-      {!localStorage.getItem("account") ? (
-        <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
-          <div className="text-center">
-            <button
-              onClick={connectWallet}
-              className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg"
-            >
-              Connect Your Wallet
-            </button>
-          </div>
-        </div>
+
+      {!account ? (
+        // <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
+        //   <div className="text-center">
+        //     <button
+        //       onClick={connectWallet}
+        //       className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg"
+        //     >
+        //       Connect Your Wallet
+        //     </button>
+        //   </div>
+        // </div>
+        <connectWallet></connectWallet>
       ) : (
         <div className="p-10 shadow-lg bg-slate-950 backdrop-blur-3xl rounded-lg w-full max-w-2xl">
           <h1 className="text-2xl font-bold mb-6 text-white text-center">
@@ -217,7 +242,7 @@ const Company = () => {
             )}
           </div>
         </div>
-      )}``
+      )}
     </div>
     // <>
     //   {!localStorage.getItem('account') ? (
