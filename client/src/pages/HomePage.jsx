@@ -4,6 +4,9 @@ import { Outlet } from "react-router-dom";
 import "./HomePage.css";
 import CompanyEnrollment from "../contracts/CompanyEnrollment.json";
 
+
+
+
 const HomePage = () => {
   const [account, setAccount] = useState("");
   const [contract, setContract] = useState(null);
@@ -12,6 +15,8 @@ const HomePage = () => {
   const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
+
+
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
 

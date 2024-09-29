@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import Aadhaar from "../contracts/Aadhaar.json";
 // import './User.css';
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const User = () => {
   const [contract, setContract] = useState(null);
@@ -131,19 +132,20 @@ const User = () => {
   return (
     <div className="p-10">
       {!account ? (
-        <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-white mb-4 text-2xl">
-              Please connect a wallet that belongs to you, the User/Client.
-            </h2>
-            <button
-              onClick={connectWallet}
-              className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg"
-            >
-              Connect Your Wallet
-            </button>
-          </div>
-        </div>
+        // <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
+        //   <div className="text-center">
+        //     <h2 className="text-white mb-4 text-2xl">
+        //       Please connect a wallet that belongs to you, the User/Client.
+        //     </h2>
+        //     <button
+        //       onClick={connectWallet}
+        //       className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg"
+        //     >
+        //       Connect Your Wallet
+        //     </button>
+        //   </div>
+        // </div>
+        <ConnectButton></ConnectButton>
       ) : (
         <div className="flex flex-col items-center">
           {/* <div> */}

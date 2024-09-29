@@ -5,13 +5,7 @@ import Aadhaar from "../contracts/Aadhaar.json";
 
 // import './Company.css'; // Import your CSS file for styling
 
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-const config = getDefaultConfig({
-  appName: 'My RainbowKit App',
-  projectId: 'YOUR_PROJECT_ID',
-  chains: [mainnet, polygon, optimism, arbitrum, base],
-  ssr: true, // If your dApp uses server side rendering (SSR)
-});
+
 
 const Company = () => {
   const { id } = useParams();
