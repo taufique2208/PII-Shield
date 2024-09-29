@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@ethersproject/units": "^5.7.0",
+    "@rainbow-me/rainbowkit": "^2.1.7",
+    "@tanstack/react-query": "^5.56.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,6 +15,8 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
+    "viem": "^2.21.15",
+    "wagmi": "^2.12.16",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

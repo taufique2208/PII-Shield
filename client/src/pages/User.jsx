@@ -111,7 +111,7 @@ const User = () => {
     }
 
     return (
-        <div className='p-10'>
+        <div>
             {!account ? (
                 <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
                     <div className="text-center">
