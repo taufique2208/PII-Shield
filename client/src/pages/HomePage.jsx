@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { Outlet } from "react-router-dom";
 import "./HomePage.css";
 import CompanyEnrollment from "../contracts/CompanyEnrollment.json";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 
 
@@ -93,14 +94,15 @@ const HomePage = () => {
   return (
     <>
       {!localStorage.getItem("account") ? (
-        <div>
-          <button
-            className="text-center w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
-            onClick={connectWallet}
-          >
-            Connect MetaMask
-          </button>
-        </div>
+        // <div>
+        //   <button
+        //     className="text-center w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
+        //     onClick={connectWallet}
+        //   >
+        //     Connect MetaMask
+        //   </button>
+        // </div>
+        <ConnectButton></ConnectButton>
       ) : isCompany ? (
         <Outlet />
       ) : (

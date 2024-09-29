@@ -3,11 +3,13 @@ import { ethers } from "ethers";
 import Aadhaar from "../contracts/Aadhaar.json";
 // import './User.css';
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 const User = () => {
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState(null);
   const [userEvents, setUserEvents] = useState([]);
+  const {isConnected, address} = useAccount()
 
   // const [pending,set]
   useEffect(() => {
@@ -131,7 +133,7 @@ const User = () => {
 
   return (
     <div className="p-10">
-      {!account ? (
+      {!isConnected ? (
         // <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
         //   <div className="text-center">
         //     <h2 className="text-white mb-4 text-2xl">
@@ -210,6 +212,13 @@ const User = () => {
               Submit
             </button>
           </form>
+          <button
+            onClick={() => {
+              console.log(address);
+            }}
+          >
+            click
+          </button>
           {/* </div> */}
 
           <div className="mt-10 w-full max-w-md">

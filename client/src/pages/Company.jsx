@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ethers } from "ethers";
 import Aadhaar from "../contracts/Aadhaar.json";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 // import './Company.css'; // Import your CSS file for styling
 
@@ -152,16 +153,17 @@ const Company = () => {
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center">
       {!localStorage.getItem("account") ? (
-        <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
-          <div className="text-center">
-            <button
-              onClick={connectWallet}
-              className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg"
-            >
-              Connect Your Wallet
-            </button>
-          </div>
-        </div>
+        // <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
+        //   <div className="text-center">
+        //     <button
+        //       onClick={connectWallet}
+        //       className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg"
+        //     >
+        //       Connect Your Wallet
+        //     </button>
+        //   </div>
+        // </div>
+        <connectWallet></connectWallet>
       ) : (
         <div className="p-10 shadow-lg bg-slate-950 backdrop-blur-3xl rounded-lg w-full max-w-2xl">
           <h1 className="text-2xl font-bold mb-6 text-white text-center">
