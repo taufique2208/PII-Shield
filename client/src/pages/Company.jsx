@@ -31,7 +31,7 @@ const Company = () => {
 
       const contract = new ethers.Contract(
         // process.env.REACT_APP_CONTRACT_ADDRESS,
-        "0xADCeaDf9EAa27A5DeA227911d2b189EE9da2a294",
+        "0xf81e0D57Fe463b23559042eF7D0dc80A70eBf4dE",
         Aadhaar.abi,
         signer
       );
@@ -44,6 +44,10 @@ const Company = () => {
 
   useEffect(() => {
     const checkAccess = async () => {
+      if(!contract || !id){
+        console.log("apka insiitialised nahi hai babu");
+        return;
+      }
       try {
         console.log(id)
         const information = await contract.checkAllAccess(id);
@@ -131,7 +135,7 @@ const Company = () => {
     setLoading(true)
     try {
       if(contract){
-        await contract.requestAccessName(id);
+        await contract.requestAccessName(id,"ROW");
         console.log("send request")
       }
     } catch (error) {

@@ -24,7 +24,8 @@ const HomePage = () => {
     const signer = provider.getSigner();
 
     const contract = new ethers.Contract(
-      process.env.REACT_APP_ENROLLMENT_CONTRACT_ADDRESS,
+      // process.env.REACT_APP_ENROLLMENT_CONTRACT_ADDRESS,
+      "0xADCeaDf9EAa27A5DeA227911d2b189EE9da2a294",
       CompanyEnrollment.abi,
       signer
     );

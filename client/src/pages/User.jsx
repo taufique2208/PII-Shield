@@ -35,9 +35,10 @@ const User = () => {
         );
         events.forEach((event) => {
           console.log("Event:", event);
+          console.log(address)
           if (
             event.args[2].toString().trim().toLowerCase() ===
-            localStorage.getItem("account").toString().trim().toLowerCase()
+            address.toString().trim().toLowerCase()
           ) {
             setUserEvents([...userEvents, event]);
           }
@@ -47,6 +48,8 @@ const User = () => {
       }
     };
     getEvents();
+
+    
   }, []);
 
   const [formData, setFormData] = useState({
@@ -86,15 +89,15 @@ const User = () => {
     }
     if (id === "Home Address") {
       await contract.grantAccessHomeAddress(companyAddress);
-      console.log("Access granted for name");
+      console.log("Access granted for home address");
     }
     if (id === "DOB") {
       await contract.grantAccessDOB(companyAddress);
-      console.log("Access granted for name");
+      console.log("Access granted for DOB");
     }
     if (id === "Gender") {
       await contract.grantAccessGender(companyAddress);
-      console.log("Access granted for name");
+      console.log("Access granted for Gender");
     }
   };
 
@@ -212,6 +215,7 @@ const User = () => {
                   className="event-item flex justify-between items-center p-2 border border-gray-300 rounded-md"
                 >
                   <span>{event.args[0]}</span>
+                  <span>company: {event.args[3]}</span>
                   {/* <span>{event.name}</span> */}
 
                   <button
