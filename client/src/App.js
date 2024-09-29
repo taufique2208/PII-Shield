@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import User from "./pages/User";
 import Company from "./pages/Company";
 import HomePage from "./pages/HomePage";
+import UserHome from "./pages/UserHome";
 import "./index.css";
 import { Outlet } from "react-router-dom";
 
@@ -30,6 +31,7 @@ function App() {
         <RainbowKitProvider>
           <div className="App">
             <Routes>
+              <Route path="/userhome" element={<UserHome/>} />
               <Route path="/user" element={<User />} />
 
               <Route element={<HomePage />}>
