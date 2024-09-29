@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { ethers } from 'ethers';
-import Aadhaar from '../contracts/Aadhaar.json';
-import './Company.css'; // Import your CSS file for styling
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { ethers } from "ethers";
+import Aadhaar from "../contracts/Aadhaar.json";
+
+// import './Company.css'; // Import your CSS file for styling
+
+
 
 const Company = () => {
   const { id } = useParams();
   const [contract, setContract] = useState(null);
-  const [account, setAccount] = useState('');
-  const [data, setData] = useState({ name: '', dob: '', HomeAddress: '', gender: '' });
+  const [account, setAccount] = useState("");
+  const [data, setData] = useState({
+    name: "",
+    dob: "",
+    HomeAddress: "",
+    gender: "",
+  });
 
   useEffect(() => {
     try {
@@ -16,13 +24,13 @@ const Company = () => {
       const signer = provider.getSigner();
 
       const contract = new ethers.Contract(
-        '0xC3E7646696a672dD96133499A9c557c991b1a3bb',
+        process.env.REACT_APP_CONTRACT_ADDRESS,
         Aadhaar.abi,
         signer
       );
       setContract(contract);
     } catch (error) {
-      console.log('Error in connecting to contract:', error);
+      console.log("Error in connecting to contract:", error);
     }
   }, []);
 
@@ -43,17 +51,50 @@ const Company = () => {
     //   }
     // };
     const getName = async () => {
-        try {
-          const name = await contract.retrieveName(id);
-          setData((prevData) => ({ ...prevData, name }));
-          console.log(name)
-        } catch (error) {
-          console.log('Error getting name:', error);
-        }
-      };
-      
+      try {
+        const name = await contract.retrieveName(id);
+        setData((prevData) => ({ ...prevData, name }));
+        console.log(name);
+      } catch (error) {
+        console.log("Error getting name:", error);
+      }
+    };
+
+    const getDOB = async () => {
+      try {
+        const DOB = await contract.retrieveDOB(id);
+        setData((prevData) => ({ ...prevData, DOB }));
+        console.log(DOB);
+      } catch (error) {
+        console.log("Error getting name:", error);
+      }
+    };
+
+    const getAddress = async () => {
+      try {
+        const address = await contract.retrieveHomeAddress(id);
+        setData((prevData) => ({ ...prevData, address }));
+        console.log(address);
+      } catch (error) {
+        console.log("Error getting name:", error);
+      }
+    };
+
+    const getGender = async () => {
+      try {
+        const gender = await contract.retrieveGender(id);
+        setData((prevData) => ({ ...prevData, gender }));
+        console.log(gender);
+      } catch (error) {
+        console.log("Error getting name:", error);
+      }
+    };
+
     if (contract && id) {
       getName();
+      getDOB();
+      getAddress();
+      getGender();
     }
   }, [contract, id]);
 
@@ -61,16 +102,18 @@ const Company = () => {
     if (window.ethereum) {
       try {
         const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts',
+          method: "eth_requestAccounts",
         });
-        console.log('Connected:', accounts[0]);
+        console.log("Connected:", accounts[0]);
         setAccount(accounts[0]);
-        localStorage.setItem('account', accounts[0]);
+        localStorage.setItem("account", accounts[0]);
       } catch (error) {
-        console.error('Error connecting to MetaMask:', error);
+        console.error("Error connecting to MetaMask:", error);
       }
     } else {
-      alert('MetaMask is not installed. Please install MetaMask and try again.');
+      alert(
+        "MetaMask is not installed. Please install MetaMask and try again."
+      );
     }
   };
 
@@ -78,52 +121,148 @@ const Company = () => {
     try {
       await contract.requestAccessName(id);
     } catch (error) {
-      console.log('Error getting name:', error);
+      console.log("Error getting name:", error);
     }
-  }
+  };
+
+  const getDOB = async () => {
+    try {
+      await contract.requestAccessDOB(id);
+    } catch (error) {
+      console.log("Error getting DOB:", error);
+    }
+  };
+
+  const getGender = async () => {
+    try {
+      await contract.requestAccessGender(id);
+    } catch (error) {
+      console.log("Error getting gender:", error);
+    }
+  };
+
+  const getAddress = async () => {
+    try {
+      await contract.requestAccessHomeAddress(id);
+    } catch (error) {
+      console.log("Error getting address:", error);
+    }
+  };
 
   return (
-    <>
-      {!localStorage.getItem('account') ? (
-        <>
-          <h1>Connect Wallet</h1>
-          <button onClick={connectWallet}>Connect MetaMask</button>
-        </>
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      {!localStorage.getItem("account") ? (
+        <div className="min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
+          <div className="text-center">
+            <button
+              onClick={connectWallet}
+              className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg"
+            >
+              Connect Your Wallet
+            </button>
+          </div>
+        </div>
       ) : (
-        <>
-          <h1>User Data</h1>
-          <div className="info-container">
+        <div className="p-10 shadow-lg bg-slate-950 backdrop-blur-3xl rounded-lg w-full max-w-2xl">
+          <h1 className="text-2xl font-bold mb-6 text-white text-center">
+            User Data
+          </h1>
+          <div className="space-y-6">
             {/* Name Button */}
-            {data.name === '' ? (
-              <button className="info-button" onClick={getName}>Get Name</button>
+            {data.name === "" ? (
+              <button
+                className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all duration-300 shadow-md"
+                onClick={getName}
+              >
+                Get Name
+              </button>
             ) : (
-              <p className="info-text">Name: {data.name}</p>
+              <p className="text-lg font-semibold text-gray-700">
+                Name: {data.name}
+              </p>
             )}
 
             {/* DOB Button */}
-            {data.dob === '' ? (
-              <button className="info-button">Get DOB</button>
+            {data.dob === "" ? (
+              <button className="w-full py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-all duration-300 shadow-md" onClick={getDOB}>
+                Get DOB
+              </button>
             ) : (
-              <p className="info-text">DOB: {data.dob}</p>
+              <p className="text-lg font-semibold text-gray-700">
+                DOB: {data.dob}
+              </p>
             )}
 
             {/* Address Button */}
-            {data.HomeAddress === '' ? (
-              <button className="info-button">Get Address</button>
+            {data.HomeAddress === "" ? (
+              <button className="w-full py-3 bg-purple-500 text-white font-semibold rounded-lg hover:bg-purple-600 transition-all duration-300 shadow-md" onClick={getAddress}>
+                Get Address
+              </button>
             ) : (
-              <p className="info-text">Address: {data.HomeAddress}</p>
+              <p className="text-lg font-semibold text-gray-700">
+                Address: {data.HomeAddress}
+              </p>
             )}
 
             {/* Gender Button */}
-            {data.gender === '' ? (
-              <button className="info-button">Get Gender</button>
+            {data.gender === "" ? (
+              <button className="w-full py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md" onClick={getGender}>
+                Get Gender
+              </button>
             ) : (
-              <p className="info-text">Gender: {data.gender}</p>
+              <p className="text-lg font-semibold text-gray-700">
+                Gender: {data.gender}
+              </p>
             )}
           </div>
-        </>
+        </div>
       )}
-    </>
+    </div>
+    // <>
+    //   {!localStorage.getItem('account') ? (
+    //     <>
+    //       <h1>Connect Wallet</h1>
+    //       <button
+    //         onClick={connectWallet}
+    //         className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all shadow-lg">
+    //         Connect Your Wallet
+    //       </button>
+    //     </>
+    //   ) : (
+    //     <>
+    //       <h1>User Data</h1>
+    //       <div className="info-container">
+    //         {/* Name Button */}
+    //         {data.name === '' ? (
+    //           <button className="info-button" onClick={getName}>Get Name</button>
+    //         ) : (
+    //           <p className="info-text">Name: {data.name}</p>
+    //         )}
+
+    //         {/* DOB Button */}
+    //         {data.dob === '' ? (
+    //           <button className="info-button">Get DOB</button>
+    //         ) : (
+    //           <p className="info-text">DOB: {data.dob}</p>
+    //         )}
+
+    //         {/* Address Button */}
+    //         {data.HomeAddress === '' ? (
+    //           <button className="info-button">Get Address</button>
+    //         ) : (
+    //           <p className="info-text">Address: {data.HomeAddress}</p>
+    //         )}
+
+    //         {/* Gender Button */}
+    //         {data.gender === '' ? (
+    //           <button className="info-button">Get Gender</button>
+    //         ) : (
+    //           <p className="info-text">Gender: {data.gender}</p>
+    //         )}
+    //       </div>
+    //     </>
+    //   )}
+    // </>
   );
 };
 
